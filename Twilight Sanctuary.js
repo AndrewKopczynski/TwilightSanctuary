@@ -1,27 +1,23 @@
-// 2021-AUG-16
+// 2022-JAN-03
+// For Foundry V9
 const tokens = canvas.tokens.controlled;
 
 if (tokens.length > 0)
 {
-	tokens.forEach(UpdateTempHP);
+	await tokens.forEach(UpdateTempHP);
 }
 else
 {
 	ui.notifications.warn("No Tokens are selected!");
 }
 
-function UpdateTempHP(token)
+async function UpdateTempHP(token)
 {
-	let actor = token.actor;
-	let { attributes } = actor.data.data;
-	let current_tempHP = attributes.hp.temp;
-	
-	// Input the token name of your cleric here.
-	// Alternatively, set current_level to a constant instead.
-	let current_level = game.actors.getName("ClericName").data.data.details.level;
+	let current_tempHP = token.actor.data.data?.atrributes?.hp?.temp;
+	let cleric = game.actors.getName("Anthiope");
 	
 	// Roll Twilight Sanctuary temporary hit points
-	let healRoll = new Roll(`1d6 + ${current_level}[cleric level]`).roll();
+	let healRoll = new Roll('1d6 + @classes.cleric.levels', cleric.getRollData()).evaluate({async: false});
 	healRoll.toMessage({
 		user: game.user._id,
 		speaker: ChatMessage.getSpeaker(),
@@ -29,15 +25,12 @@ function UpdateTempHP(token)
 	});
 	
 	// Check if new roll is higher than old temp HP
+	console.log(healRoll);
 	let new_tempHP = parseInt(healRoll.total);
 	if (current_tempHP > new_tempHP)
 	{
 		new_tempHP = current_tempHP;
 	}
 	
-	// Set the temp HP
-	actor.update
-	({
-		"data.attributes.hp.temp": new_tempHP,
-	});
+	await token.actor.update({'data.attributes.hp.temp': new_tempHP});
 }
