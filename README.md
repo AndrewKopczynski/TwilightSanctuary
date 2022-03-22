@@ -1,4 +1,4 @@
-# TwilightSanctuary
+# Twilight Sanctuary 5e
 a Foundry VTT macro
 
 This macro rolls temporary hit points (1d6 + cleric level) for all of the selected tokens, and then automatically applies the temporary hit points to each of those tokens.
