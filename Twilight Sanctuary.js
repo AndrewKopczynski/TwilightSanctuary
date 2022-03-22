@@ -14,7 +14,7 @@ else
 async function UpdateTempHP(token)
 {
 	let current_tempHP = token.actor.data.data?.attributes?.hp?.temp;
-	let cleric = game.actors.getName("Anthiope");
+	let cleric = game.actors.getName("ClericName");
 	
 	// Roll Twilight Sanctuary temporary hit points
 	let healRoll = new Roll('1d6 + @classes.cleric.levels', cleric.getRollData()).evaluate({async: false});
